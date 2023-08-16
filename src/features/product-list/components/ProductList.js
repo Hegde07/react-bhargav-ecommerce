@@ -18,11 +18,10 @@ import {
 } from "@heroicons/react/20/solid";
 
 const sortOptions = [
-  { name: "Most Popular", href: "#", current: true },
-  { name: "Best Rating", href: "#", current: false },
-  { name: "Newest", href: "#", current: false },
-  { name: "Price: Low to High", href: "#", current: false },
-  { name: "Price: High to Low", href: "#", current: false },
+  
+  { name: "Best Rating", sort: "rating",order:'desc', current: false },
+  { name: "Price: Low to High", sort: "price",order:'asc', current: false },
+  { name: "Price: High to Low", sort: "price",order:'desc', current: false },
 ];
 const filters = [
   {
@@ -222,11 +221,20 @@ export function ProductList() {
   const [filter,setFilter]=useState({});
   // const incrementValue = Number(incrementAmount) || 0;
 
+
+
   const handleFilter=(e,section,option)=>{
     const newFilter={...filter,[section.id]:option.value};
     setFilter(newFilter)
     dispatch(fetchProductsByFilterAsync(newFilter))
     console.log(section.id,option.value)
+  }
+
+  const handleSort=(e,option)=>{
+    const newFilter={...filter,_sort:option.sort,_order:option.order};
+    setFilter(newFilter)
+    dispatch(fetchProductsByFilterAsync(newFilter))
+    
   }
 
   useEffect(() => {
@@ -379,7 +387,28 @@ export function ProductList() {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none"></Menu.Items>
+                      <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          <div className="py-1">
+                          {sortOptions.map((option) => (
+                            <Menu.Item key={option.name}>
+                              {({ active }) => (
+                                <p
+                                  onClick={e=>handleSort(e,option)}
+                                  className={classNames(
+                                    option.current
+                                      ? "font-medium text-gray-900"
+                                      : "text-gray-500",
+                                    active ? "bg-gray-100" : "",
+                                    "block px-4 py-2 text-sm"
+                                  )}
+                                >
+                                  {option.name}
+                                </p>
+                              )}
+                            </Menu.Item>
+                          ))}
+                        </div>
+                      </Menu.Items>
                     </Transition>
                   </Menu>
 
@@ -633,3 +662,4 @@ export function ProductList() {
     </div>
   );
 }
+ 
