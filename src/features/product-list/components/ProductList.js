@@ -2,6 +2,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { ITEMS_PER_PAGE } from "../../../app/constants";
 import {
   fetchAllProductsAsync,
+  fetchBrandsAsync,
+  fetchCategoriesAsync,
   fetchProductsByFilterAsync,
   selectAllProducts,
   selectBrands,
@@ -31,7 +33,6 @@ const sortOptions = [
   { name: "Price: High to Low", sort: "price", order: "desc", current: false },
 ];
 
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -50,8 +51,6 @@ export function ProductList() {
       options: categories,
     },
     {
-      id: "size",
-      name: "Size",
       id: "brand",
       name: "Brands",
       options: brands,
@@ -94,9 +93,14 @@ export function ProductList() {
     dispatch(fetchProductsByFilterAsync({ filter, sort, pagination }));
   }, [dispatch, filter, sort, page]);
 
-  useEffect(()=>{
- setPage(1)
-  },[totalItems,sort])
+  useEffect(() => {
+    setPage(1);
+  }, [totalItems, sort]);
+
+  useEffect(() => {
+    dispatch(fetchBrandsAsync());
+    dispatch(fetchCategoriesAsync());
+  }, []);
 
   return (
     <div>
@@ -191,7 +195,10 @@ export function ProductList() {
 
                 <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                   {/* Filters */}
-                  <DesktopFilter handleFilter={handleFilter} filters={filters}></DesktopFilter>
+                  <DesktopFilter
+                    handleFilter={handleFilter}
+                    filters={filters}
+                  ></DesktopFilter>
                   {/* Product grid */}
                   <ProductGrid products={products}></ProductGrid>
                 </div>
@@ -217,7 +224,7 @@ function MobileFilter({
   mobileFiltersOpen,
   setMobileFiltersOpen,
   handleFilter,
-  filters
+  filters,
 }) {
   return (
     <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -331,7 +338,7 @@ function MobileFilter({
     </Transition.Root>
   );
 }
-function DesktopFilter({ handleFilter,filters }) {
+function DesktopFilter({ handleFilter, filters }) {
   return (
     <form className="hidden lg:block">
       {filters.map((section) => (
@@ -387,17 +394,18 @@ function DesktopFilter({ handleFilter,filters }) {
   );
 }
 function Pagination({ handlePage, setPage, page, totalItems }) {
+  const totalPage = Math.ceil(totalItems / ITEMS_PER_PAGE);
   return (
     <>
       <div className="flex flex-1 justify-between sm:hidden">
-        <a
-          href="#"
+        <div
+           onClick={(e) => handlePage(page > 1 ? page - 1 : page)}
           className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
         >
           Previous
-        </a>
+        </div>
         <a
-          href="#"
+           onClick={(e) => handlePage(page < totalItems ? page + 1 : page)}
           className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
         >
           Next
@@ -410,8 +418,13 @@ function Pagination({ handlePage, setPage, page, totalItems }) {
             <span className="font-medium">
               {(page - 1) * ITEMS_PER_PAGE + 1}
             </span>{" "}
-            to <span className="font-medium">{page * ITEMS_PER_PAGE > totalItems ? totalItems : page * ITEMS_PER_PAGE }</span> of{" "}
-            <span className="font-medium">{totalItems}</span> results
+            to{" "}
+            <span className="font-medium">
+              {page * ITEMS_PER_PAGE > totalItems
+                ? totalItems
+                : page * ITEMS_PER_PAGE}
+            </span>{" "}
+            of <span className="font-medium">{totalItems}</span> results
           </p>
         </div>
         <div>
@@ -419,37 +432,35 @@ function Pagination({ handlePage, setPage, page, totalItems }) {
             className="isolate inline-flex -space-x-px rounded-md shadow-sm"
             aria-label="Pagination"
           >
-            <a
-              href="#"
+            <div
+              onClick={(e) => handlePage(page > 1 ? page - 1 : page)}
               className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
             >
               <span className="sr-only">Previous</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-            </a>
+            </div>
             {/* Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" */}
-            {Array.from({ length: Math.ceil(totalItems / ITEMS_PER_PAGE) }).map(
-              (el, index) => (
-                <div
-                  onClick={(e) => handlePage(index + 1)}
-                  aria-current="page"
-                  className={`relative z-10 cursor-pointer inline-flex items-center ${
-                    index + 1 === page
-                      ? "bg-indigo-600 text-white"
-                      : "text-gray-400"
-                  }  px-4 py-2 text-sm font-semibold text-gray-400 focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
-                >
-                  {index + 1}
-                </div>
-              )
-            )}
+            {Array.from({ length: totalPage }).map((el, index) => (
+              <div
+                onClick={(e) => handlePage(index + 1)}
+                aria-current="page"
+                className={`relative z-10 cursor-pointer inline-flex items-center ${
+                  index + 1 === page
+                    ? "bg-indigo-600 text-white"
+                    : "text-gray-400"
+                }  px-4 py-2 text-sm font-semibold text-gray-400 focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+              >
+                {index + 1}
+              </div>
+            ))}
 
-            <a
-              href="#"
+            <div
+              onClick={(e) => handlePage(page < totalPage ? page + 1 : page)}
               className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
             >
               <span className="sr-only">Next</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-            </a>
+            </div>
           </nav>
         </div>
       </div>
@@ -465,7 +476,7 @@ function ProductGrid({ products }) {
         <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
             {products.map((product) => (
-              <Link to="/product-detail">
+              <Link to={`/product-detail/${product.id}`}>
                 <div
                   key={product.id}
                   className="group relative border-solid border-2 p-2 border-gray-200"
