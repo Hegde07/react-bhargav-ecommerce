@@ -9,6 +9,7 @@ import {
   updateCartAsync,
 } from "../features/cart/cartSlice";
 import { selectLoggedInUser, updateUserAsync } from "../features/auth/authSlice";
+import { createOrderAsync } from "../features/order/orderSlice";
 
 
 const Checkout = () => {
@@ -37,7 +38,18 @@ const Checkout = () => {
   const handleRemove = (e, id) => {
     dispatch(deleteItemFromCartAsync(id));
   };
-
+ const handleAddress=(e)=>{
+  console.log(e.target.value)
+  setSelectedAddress(user.addresses[e.target.value])
+ }
+  const handlePayment=(e)=>{
+  console.log(e.target.value)
+  setPaymentMethod(e.target.value)
+ }
+ const handleOrder=(e)=>{
+  const order = {items,totalAmount,totalItems,user,paymentMethod,selectedAddress}
+  dispatch( createOrderAsync(order))
+ }
   return (
     <>
       {!items.length && <Navigate to="/" replace={true}></Navigate>}
@@ -216,15 +228,17 @@ const Checkout = () => {
                 </p>
 
                 <ul role="list">
-                  {user.addresses.map((address) => (
+                  {user.addresses.map((address,index) => (
                     <li
-                      key={address.phone}
+                      key={index}
                       className="flex justify-between gap-x-6 py-5 px-5 border-solid border-2 border-gray-200"
                     >
                       <div className="flex min-w-0 gap-x-4">
                         <input
+                          onChange={handleAddress}
                           name="address"
                           type="radio"
+                          value={index}
                           className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                         />
 
@@ -267,8 +281,11 @@ const Checkout = () => {
                       <div className="flex items-center gap-x-3">
                         <input
                           id="cash"
+                          onChange={handlePayment}
                           name="payments"
                           type="radio"
+                          value='cash'
+                          checked={paymentMethod==='cash'}
                           className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                         />
                         <label
@@ -281,8 +298,11 @@ const Checkout = () => {
                       <div className="flex items-center gap-x-3">
                         <input
                           id="card"
+                             onChange={handlePayment}
                           name="payments"
                           type="radio"
+                          value='card'
+                          checked={paymentMethod==='card'}
                           className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                         />
                         <label
@@ -385,12 +405,12 @@ const Checkout = () => {
                   Shipping and taxes calculated at checkout.
                 </p>
                 <div className="mt-6">
-                  <Link
-                    to="/checkout"
-                    className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                  <div
+                    onClick={handleOrder}
+                    className="flex items-center cursor-pointer justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                   >
-                    Checkout
-                  </Link>
+                    Order now
+                  </div>
                 </div>
                 <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                   <p>
