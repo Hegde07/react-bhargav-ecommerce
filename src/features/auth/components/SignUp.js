@@ -44,6 +44,7 @@ export function SignUp() {
                 createUserAsync({
                   email: data.email,
                   password: data.password,
+                  addresses:[]
                 })
               );
               console.log(data);

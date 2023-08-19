@@ -3,10 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { deleteItemFromCartAsync, selectItems, updateCartAsync } from "./cartSlice";
 
 export function Cart() {
+  
   const dispatch = useDispatch();
   const items = useSelector(selectItems);
   const [open, setOpen] = useState(true);
@@ -23,6 +24,8 @@ export function Cart() {
   }
 
   return (
+    <>
+    {!items.length && <Navigate to='/' replace={true}></Navigate>}
     <div className="mx-auto mt-12 bg-white max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       <h1 className="text-4xl font-bold tracking-tight text-gray-900">Cart</h1>
       <div>
@@ -91,7 +94,7 @@ export function Cart() {
         </div>
       </div>
 
-     { items.length ? <div className="border-t border-gray-200 p-4 py-6 sm:px-6">
+      <div className="border-t border-gray-200 p-4 py-6 sm:px-6">
         <div className="flex justify-between my-2 text-base font-medium text-gray-900">
           <p>Subtotal</p>
           <p>${totalAmount}</p>
@@ -126,7 +129,8 @@ export function Cart() {
             </Link>
           </p>
         </div>
-      </div>:'No Items to show'}
+      </div>
     </div>
+    </>
   );
 }

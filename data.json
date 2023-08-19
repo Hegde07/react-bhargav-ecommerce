@@ -2368,11 +2368,23 @@
     {
       "email": "hegdebhargav402@gmail.com",
       "password": "Dictator$12",
+      "addresses": [
+        {
+          "name": "Bhargav Hegde",
+          "email": "hegdebhargav402@gmail.com",
+          "phone": "09480615851",
+          "street": "Yellapur",
+          "city": "Yellapur",
+          "state": "Karnataka",
+          "pinCode": "581347"
+        }
+      ],
       "id": 1
     },
     {
       "email": "Bhargav123@gmail.com",
       "password": "Bhargav$12",
+      "addresses": [],
       "id": 2
     }
   ],
@@ -2418,7 +2430,6 @@
       "user": 2
     },
     {
-      "id": 6,
       "title": "MacBook Pro",
       "description": "MacBook Pro 2021 with mini-LED display may launch between September, November",
       "price": 1749,
@@ -2435,7 +2446,8 @@
         "https://i.dummyjson.com/data/products/6/4.jpg"
       ],
       "quantity": 1,
-      "user": 1
+      "user": 1,
+      "id": 13
     }
   ]
 }
