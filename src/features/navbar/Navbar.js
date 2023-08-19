@@ -7,6 +7,8 @@ import {
   ShoppingCartIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { useSelector } from "react-redux";
+import { selectItems } from "../cart/cartSlice";
 
 const user = {
   name: "Tom Cook",
@@ -28,6 +30,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 const Navbar = ({ children }) => {
+  const items = useSelector(selectItems)
   return (
     <div className="min-h-full">
       <Disclosure as="nav" className="bg-gray-800">
@@ -73,9 +76,9 @@ const Navbar = ({ children }) => {
                       className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                     >
                       <span className="absolute -inset-1.5" />
-                      <span className="inline-flex items-center rounded-md bg-gray-50 mb-7-ml-3  px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-                        5
-                      </span>
+                     { items.length>0 && <span className="inline-flex items-center rounded-md bg-gray-50 mb-7-ml-3  px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+                      {items.length}
+                      </span>}
                       <ShoppingCartIcon
                         className="h-6 w-6"
                         aria-hidden="true"
@@ -182,9 +185,9 @@ const Navbar = ({ children }) => {
                     className="relative ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                   >
                     <span className="absolute -inset-1.5" />
-                    <span className="inline-flex items-center rounded-md bg-gray-50 mb-7-ml-3  px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-                      5
-                    </span>
+                    {items.length>0 &&<span className="inline-flex items-center rounded-md bg-gray-50 mb-7-ml-3  px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+                     {items.length}
+                    </span>}
                     <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
                   </Link>
