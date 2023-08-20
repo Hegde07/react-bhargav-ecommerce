@@ -60,9 +60,9 @@ export function UserProfile() {
                 </button>
 
                 {showAddAddressForm? <form className="bg-white px-5 py-12 mt-12" noValidate  onSubmit={handleSubmit((data) => {
-              dispatch(
+             
                 handleAdd(data)
-              );
+              
               reset();
               console.log(data);
             })}>
@@ -231,9 +231,9 @@ export function UserProfile() {
              <div>
 
            {selectedEditIndex === index ? <form className="bg-white px-5 py-12 mt-12" noValidate  onSubmit={handleSubmit((data) => {
-              dispatch(
+              
                 handleEdit(data,index)
-              );
+              
               reset();
               console.log(data);
             })}>
