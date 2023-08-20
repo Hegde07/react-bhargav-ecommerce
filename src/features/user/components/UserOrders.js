@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchLoggedInUserOrderAsync, selectUserInfo, selectUserOrders } from "../userSlice";
+import {
+  fetchLoggedInUserOrderAsync,
+  selectUserInfo,
+  selectUserOrders,
+} from "../userSlice";
 import { Link } from "react-router-dom";
 
 const UserOrders = () => {
@@ -74,7 +78,7 @@ const UserOrders = () => {
                 <p>{order?.totalItems} items</p>
               </div>
               <p className="mt-0.5 text-sm text-gray-500">Shipping Address</p>
-              
+
               <div className="flex justify-between gap-x-6 py-5 px-5 border-solid border-2 border-gray-200">
                 <div className="flex min-w-0 gap-x-4">
                   <div className="min-w-0 flex-auto">

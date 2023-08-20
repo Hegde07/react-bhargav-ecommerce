@@ -9,17 +9,19 @@ import {
   updateCartAsync,
 } from "../features/cart/cartSlice";
 import { updateUserAsync } from "../features/auth/authSlice";
-import { createOrderAsync, selectCurrentOrder} from "../features/order/orderSlice";
+import {
+  createOrderAsync,
+  selectCurrentOrder,
+} from "../features/order/orderSlice";
 import { selectUserInfo } from "../features/user/userSlice";
-
 
 const Checkout = () => {
   const dispatch = useDispatch();
-  const currentOrder=useSelector(selectCurrentOrder)
+  const currentOrder = useSelector(selectCurrentOrder);
   const items = useSelector(selectItems);
-  const user=useSelector(selectUserInfo)
-  const [selectedAddress,setSelectedAddress]=useState(null)
-  const [paymentMethod,setPaymentMethod]=useState('cash')
+  const user = useSelector(selectUserInfo);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState("cash");
   const totalAmount = items.reduce(
     (amount, item) => item.price * item.quantity + amount,
     0
@@ -40,46 +42,58 @@ const Checkout = () => {
   const handleRemove = (e, id) => {
     dispatch(deleteItemFromCartAsync(id));
   };
- const handleAddress=(e)=>{
-  console.log(e.target.value)
-  setSelectedAddress(user.addresses[e.target.value])
- }
-  const handlePayment=(e)=>{
-  console.log(e.target.value)
-  setPaymentMethod(e.target.value)
- }
- const handleOrder=(e)=>{
-  if (selectedAddress && paymentMethod) {
-    const order = {
-      items,
-      totalAmount,
-      totalItems,
-      user,
-      paymentMethod,
-      selectedAddress,
-      status: 'pending' // other status can be delivered, received.
-    };
-    dispatch(createOrderAsync(order));
-    // need to redirect from here to a new page of order success.
-  } else {
-    // TODO : we can use proper messaging popup here
-    alert('Enter Address and Payment method')
-  }
- }
+  const handleAddress = (e) => {
+    console.log(e.target.value);
+    setSelectedAddress(user.addresses[e.target.value]);
+  };
+  const handlePayment = (e) => {
+    console.log(e.target.value);
+    setPaymentMethod(e.target.value);
+  };
+  const handleOrder = (e) => {
+    if (selectedAddress && paymentMethod) {
+      const order = {
+        items,
+        totalAmount,
+        totalItems,
+        user,
+        paymentMethod,
+        selectedAddress,
+        status: "pending", // other status can be delivered, received.
+      };
+      dispatch(createOrderAsync(order));
+      // need to redirect from here to a new page of order success.
+    } else {
+      // TODO : we can use proper messaging popup here
+      alert("Enter Address and Payment method");
+    }
+  };
   return (
     <>
       {!items.length && <Navigate to="/" replace={true}></Navigate>}
-      {currentOrder && <Navigate to={`/order-success/${currentOrder.id}`} replace={true}></Navigate>}
+      {currentOrder && (
+        <Navigate
+          to={`/order-success/${currentOrder.id}`}
+          replace={true}
+        ></Navigate>
+      )}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
           <div className="lg:col-span-3">
-            <form className="bg-white px-5 py-12 mt-12" noValidate  onSubmit={handleSubmit((data) => {
-              dispatch(
-                updateUserAsync({...user,addresses:[...user.addresses,data]})
-              );
-              reset();
-              console.log(data);
-            })}>
+            <form
+              className="bg-white px-5 py-12 mt-12"
+              noValidate
+              onSubmit={handleSubmit((data) => {
+                dispatch(
+                  updateUserAsync({
+                    ...user,
+                    addresses: [...user.addresses, data],
+                  })
+                );
+                reset();
+                console.log(data);
+              })}
+            >
               <div className="border-b border-gray-900/10 pb-12">
                 <h2 className="text-2xl font-semibold leading-7 text-gray-900">
                   Personal Information
@@ -133,7 +147,7 @@ const Checkout = () => {
                       Phone
                     </label>
                     <div className="mt-2">
-                    <input
+                      <input
                         id="phone"
                         {...register("phone", {
                           required: "phone number is required",
@@ -223,7 +237,7 @@ const Checkout = () => {
 
               <div className="mt-6 flex items-center justify-end gap-x-6">
                 <button
-                //  onClick={e=>reset()}
+                  //  onClick={e=>reset()}
                   type="button"
                   className="text-sm font-semibold leading-6 text-gray-900"
                 >
@@ -246,7 +260,7 @@ const Checkout = () => {
                 </p>
 
                 <ul role="list">
-                  {user.addresses.map((address,index) => (
+                  {user.addresses.map((address, index) => (
                     <li
                       key={index}
                       className="flex justify-between gap-x-6 py-5 px-5 border-solid border-2 border-gray-200"
@@ -302,8 +316,8 @@ const Checkout = () => {
                           onChange={handlePayment}
                           name="payments"
                           type="radio"
-                          value='cash'
-                          checked={paymentMethod==='cash'}
+                          value="cash"
+                          checked={paymentMethod === "cash"}
                           className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                         />
                         <label
@@ -316,11 +330,11 @@ const Checkout = () => {
                       <div className="flex items-center gap-x-3">
                         <input
                           id="card"
-                             onChange={handlePayment}
+                          onChange={handlePayment}
                           name="payments"
                           type="radio"
-                          value='card'
-                          checked={paymentMethod==='card'}
+                          value="card"
+                          checked={paymentMethod === "card"}
                           className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                         />
                         <label
