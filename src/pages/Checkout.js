@@ -48,8 +48,22 @@ const Checkout = () => {
   setPaymentMethod(e.target.value)
  }
  const handleOrder=(e)=>{
-  const order = {items,totalAmount,totalItems,user,paymentMethod,selectedAddress,status:'pending'}
-  dispatch( createOrderAsync(order))
+  if (selectedAddress && paymentMethod) {
+    const order = {
+      items,
+      totalAmount,
+      totalItems,
+      user,
+      paymentMethod,
+      selectedAddress,
+      status: 'pending' // other status can be delivered, received.
+    };
+    dispatch(createOrderAsync(order));
+    // need to redirect from here to a new page of order success.
+  } else {
+    // TODO : we can use proper messaging popup here
+    alert('Enter Address and Payment method')
+  }
  }
   return (
     <>
@@ -208,10 +222,11 @@ const Checkout = () => {
 
               <div className="mt-6 flex items-center justify-end gap-x-6">
                 <button
+                //  onClick={e=>reset()}
                   type="button"
                   className="text-sm font-semibold leading-6 text-gray-900"
                 >
-                  Cancel
+                  Reset
                 </button>
                 <button
                   type="submit"
