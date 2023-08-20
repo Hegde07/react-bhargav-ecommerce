@@ -8,15 +8,16 @@ import {
   deleteItemFromCartAsync,
   updateCartAsync,
 } from "../features/cart/cartSlice";
-import { selectLoggedInUser, updateUserAsync } from "../features/auth/authSlice";
+import { updateUserAsync } from "../features/auth/authSlice";
 import { createOrderAsync, selectCurrentOrder} from "../features/order/orderSlice";
+import { selectUserInfo } from "../features/user/userSlice";
 
 
 const Checkout = () => {
   const dispatch = useDispatch();
   const currentOrder=useSelector(selectCurrentOrder)
   const items = useSelector(selectItems);
-  const user=useSelector(selectLoggedInUser)
+  const user=useSelector(selectUserInfo)
   const [selectedAddress,setSelectedAddress]=useState(null)
   const [paymentMethod,setPaymentMethod]=useState('cash')
   const totalAmount = items.reduce(
