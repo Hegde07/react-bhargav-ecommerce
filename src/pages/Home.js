@@ -1,5 +1,6 @@
 import React from 'react'
 import Navbar from '../features/navbar/Navbar'
+import { Link } from 'react-router-dom'
 import { ProductList } from '../features/product-list/components/ProductList'
 
 const Home = () => {
@@ -8,7 +9,7 @@ const Home = () => {
         <Navbar>
         <ProductList></ProductList>
         </Navbar>
-       
+     
     </div>
   )
 }
