@@ -2487,7 +2487,7 @@
         "state": "Karnataka",
         "pinCode": "581347"
       },
-      "status": "pending",
+      "status": "dispatched",
       "id": 1
     },
     {
@@ -2532,7 +2532,7 @@
       },
       "paymentMethod": "cash",
       "selectedAddress": null,
-      "status": "pending",
+      "status": "cancelled",
       "id": 2
     },
     {
@@ -2588,7 +2588,7 @@
       },
       "paymentMethod": "cash",
       "selectedAddress": null,
-      "status": "pending",
+      "status": "delivered",
       "id": 3
     },
     {
@@ -3601,7 +3601,7 @@
         "state": "Karnataka",
         "pinCode": "581347"
       },
-      "status": "pending",
+      "status": "dispatched",
       "id": 21
     }
   ]
