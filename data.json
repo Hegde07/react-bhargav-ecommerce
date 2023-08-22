@@ -2397,15 +2397,6 @@
           "city": "Yellapur",
           "state": "Karnataka",
           "pinCode": "581347"
-        },
-        {
-          "name": "Test",
-          "email": "test@gmail.com",
-          "phone": "09480615851",
-          "street": "Yellapur",
-          "city": "Yellapur",
-          "state": "Karnataka",
-          "pinCode": "567859"
         }
       ],
       "id": 1
@@ -3601,7 +3592,7 @@
         "state": "Karnataka",
         "pinCode": "581347"
       },
-      "status": "dispatched",
+      "status": "delivered",
       "id": 21
     }
   ]
