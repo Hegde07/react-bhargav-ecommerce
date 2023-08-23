@@ -3,6 +3,7 @@ import { Fragment, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
+import Modals from "../features/common/Modals";
 import {
   selectItems,
   deleteItemFromCartAsync,
@@ -23,6 +24,7 @@ const Checkout = () => {
   const user = useSelector(selectUserInfo);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("cash");
+  const [openModal, setOpenModal] = useState(null);
   const totalAmount = items.reduce(
     (amount, item) => discountedPrice(item)* item.quantity + amount,
     0
@@ -408,9 +410,18 @@ const Checkout = () => {
                               </div>
 
                               <div className="flex">
+                              <Modals
+                            title={`Delete ${item.title}`}
+                            message="Are you sure you want to delete this cart item?"
+                            dangerOption="Delete"
+                            cancelOption="cancel"
+                            dangerAction={(e) => handleRemove(e, item.id)}
+                            cancelAction={()=>setOpenModal(-1)}
+                            showModal={openModal === item.id}
+                          ></Modals>
                                 <button
                                   type="button"
-                                  onClick={(e) => handleRemove(e, item.id)}
+                                  onClick={(e) => setOpenModal(item.id)}
                                   className="font-medium text-indigo-600 hover:text-indigo-500"
                                 >
                                   Remove

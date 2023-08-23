@@ -50,7 +50,8 @@
       "thumbnail": "https://i.dummyjson.com/data/products/3/thumbnail.jpg",
       "images": [
         "https://i.dummyjson.com/data/products/3/1.jpg"
-      ]
+      ],
+      "deleted": true
     },
     {
       "id": 4,
@@ -1706,7 +1707,8 @@
         "https://i.dummyjson.com/data/products/93/3.jpg",
         "https://i.dummyjson.com/data/products/93/4.jpg",
         "https://i.dummyjson.com/data/products/93/thumbnail.jpg"
-      ]
+      ],
+      "deleted": true
     },
     {
       "id": 94,

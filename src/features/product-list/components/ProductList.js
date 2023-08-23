@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import { ThreeCircles } from  'react-loader-spinner'
 import { Pagination } from "../../common/Pagination";
 import { ITEMS_PER_PAGE, discountedPrice } from "../../../app/constants";
 import {
@@ -9,6 +10,7 @@ import {
   selectAllProducts,
   selectBrands,
   selectCategories,
+  selectProductListStatus,
   selectTotalItems,
 } from "../ProductSlice";
 import { Link } from "react-router-dom";
@@ -45,6 +47,7 @@ export function ProductList() {
   const categories = useSelector(selectCategories);
   const brands = useSelector(selectBrands);
   const totalItems = useSelector(selectTotalItems);
+ 
   const filters = [
     {
       id: "category",
@@ -396,6 +399,7 @@ function DesktopFilter({ handleFilter, filters }) {
 }
 
 function ProductGrid({ products }) {
+  const status = useSelector(selectProductListStatus);
   return (
     <div className="lg:col-span-3">
       {" "}
@@ -403,6 +407,18 @@ function ProductGrid({ products }) {
       <div className="bg-white">
         <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+          {status ==='loading' ? <ThreeCircles
+            height="100"
+            width="100"
+            color="#4fa94d"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+            ariaLabel="three-circles-rotating"
+            outerCircleColor=""
+            innerCircleColor=""
+            middleCircleColor=""
+          />:null}
             {products.map((product) => (
               <Link to={`/product-detail/${product.id}`}>
                 <div
@@ -435,19 +451,22 @@ function ProductGrid({ products }) {
                     <div>
                       <p className="text-sm block font-medium text-dark-900">
                         ${discountedPrice(product)}
-                        
                       </p>
                       <p className="text-sm block line-through font-medium text-gray-500">
                         ${product.price}
                       </p>
                     </div>
                   </div>
-                  {product.deleted && <div>
+                  {product.deleted && (
+                    <div>
                       <p className="text-sm text-red-400">Product deleted</p>
-                    </div>}
-                    {product.stock<=0 && <div>
+                    </div>
+                  )}
+                  {product.stock <= 0 && (
+                    <div>
                       <p className="text-sm text-red-400">Out of Stock</p>
-                    </div>}
+                    </div>
+                  )}
                 </div>
               </Link>
             ))}

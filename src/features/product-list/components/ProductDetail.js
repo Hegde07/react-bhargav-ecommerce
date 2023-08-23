@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { addToCartAsync, selectItems } from '../../cart/cartSlice';
 import { selectLoggedInUser } from '../../auth/authSlice';
 import { discountedPrice } from '../../../app/constants';
+import { useAlert } from "react-alert";
 
 const colors=[
   { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
@@ -41,6 +42,7 @@ export default function ProductDetail() {
   const user = useSelector(selectLoggedInUser)
 const product = useSelector(selectProductById)
 const items = useSelector(selectItems);
+const alert = useAlert();
 const params = useParams();
 
 useEffect(()=>{
@@ -54,8 +56,9 @@ const handleCart=(e)=>{
   const newItem={...product,productId:product.id,quantity:1,user:user.id}
   delete newItem['id'];
 dispatch(addToCartAsync(newItem))
+alert.success("Item added to cart!")
 }else{
-alert("already added")
+alert.show("Item already added")
 }
 }
 

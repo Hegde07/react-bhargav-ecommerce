@@ -2,8 +2,10 @@ import React, { useEffect } from "react";
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
+import Modals from "../../common/Modals";
+import { useState } from "react";
 import {
-    clearSelectedProduct,
+  clearSelectedProduct,
   createProductAsync,
   fetchProductsByIdAsync,
   selectBrands,
@@ -25,12 +27,13 @@ const ProductForm = () => {
   const brands = useSelector(selectBrands);
   const categories = useSelector(selectCategories);
   const selectedProduct = useSelector(selectProductById);
+  const [openModal, setOpenModal] = useState(null);
   const params = useParams();
   useEffect(() => {
     if (params.id) {
       dispatch(fetchProductsByIdAsync(params.id));
-    }else{
-        dispatch(clearSelectedProduct());
+    } else {
+      dispatch(clearSelectedProduct());
     }
   }, [params.id, dispatch]);
   useEffect(() => {
@@ -47,13 +50,13 @@ const ProductForm = () => {
       setValue("brand", selectedProduct.brand);
       setValue("category", selectedProduct.category);
     }
-  }, [selectedProduct,params.id, setValue]);
+  }, [selectedProduct, params.id, setValue]);
 
-const handleDelete=()=>{
-    const product={...selectedProduct}
-    product.deleted = true
-    dispatch(updateProductAsync(product))
-}
+  const handleDelete = () => {
+    const product = { ...selectedProduct };
+    product.deleted = true;
+    dispatch(updateProductAsync(product));
+  };
 
   return (
     <div>
@@ -75,8 +78,8 @@ const handleDelete=()=>{
           product.stock = +product.stock;
           product.discountPercentage = +product.discountPercentage;
           if (params.id) {
-            product.id=params.id
-            product.rating =selectedProduct.rating || 0
+            product.id = params.id;
+            product.rating = selectedProduct.rating || 0;
             dispatch(updateProductAsync(product));
             reset();
           } else {
@@ -92,6 +95,7 @@ const handleDelete=()=>{
               Add Product
             </h2>
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              {selectedProduct.deleted && <h2 className="text-red-500 sm:col-span-4">This product is deleted</h2>}
               <div className="sm:col-span-4">
                 <label
                   htmlFor="title"
@@ -461,12 +465,17 @@ const handleDelete=()=>{
           >
             Cancel
           </button>
-         {selectedProduct && <button
-             onClick={handleDelete}
-            className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Delete
-          </button>}
+          {selectedProduct && !selectedProduct.deleted && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setOpenModal(true);
+              }}
+              className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Delete
+            </button>
+          )}
           <button
             type="submit"
             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -475,6 +484,15 @@ const handleDelete=()=>{
           </button>
         </div>
       </form>
+      <Modals
+        title={`Delete ${selectedProduct.title}`}
+        message="Are you sure you want to delete this Product?"
+        dangerOption="Delete"
+        cancelOption="cancel"
+        dangerAction={handleDelete}
+        cancelAction={() => setOpenModal(null)}
+        showModal={openModal}
+      ></Modals>
     </div>
   );
 };
