@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectUserInfo, updateUserAsync } from "../userSlice";
 import { useForm } from "react-hook-form";
 export function UserProfile() {
-  const user = useSelector(selectUserInfo);
+  const userInfo = useSelector(selectUserInfo);
   const [selectedEditIndex, setSelectedEditIndex] = useState(-1);
   const [showAddAddressForm, setShowAddAddressForm] = useState(false);
   const dispatch = useDispatch();
@@ -15,19 +15,19 @@ export function UserProfile() {
     formState: { errors },
   } = useForm();
   const handleEdit = (addressUpdate, index) => {
-    const newUser = { ...user, addresses: [...user.addresses] };
+    const newUser = { ...userInfo, addresses: [...userInfo.addresses] };
     newUser.addresses.splice(index, 1, addressUpdate);
     dispatch(updateUserAsync(newUser));
     setSelectedEditIndex(-1);
   };
   const handleRemove = (e, index) => {
-    const newUser = { ...user, addresses: [...user.addresses] };
+    const newUser = { ...userInfo, addresses: [...userInfo.addresses] };
     newUser.addresses.splice(index, 1);
     dispatch(updateUserAsync(newUser));
   };
   const handleEditForm = (index) => {
     setSelectedEditIndex(index);
-    const address = user.addresses[index];
+    const address = userInfo.addresses[index];
     setValue("name", address.name);
     setValue("email", address.email);
     setValue("phone", address.phone);
@@ -37,7 +37,7 @@ export function UserProfile() {
     setValue("pinCode", address.pinCode);
   };
   const handleAdd = (address) => {
-    const newUser = { ...user, addresses: [...user.addresses, address] };
+    const newUser = { ...userInfo, addresses: [...userInfo.addresses, address] };
     dispatch(updateUserAsync(newUser));
     setShowAddAddressForm(false);
   };
@@ -45,13 +45,13 @@ export function UserProfile() {
     <div>
       <div className="mx-auto mt-12 bg-white max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-          Name:{user.name ? user.name : "Guest"}
+          Name:{userInfo.name ? userInfo.name : "Guest"}
         </h1>
         <h3 className="text-xl my-5 font-bold tracking-tight text-gray-900">
-          email address : {user.email}
+          email address : {userInfo.email}
         </h3>
-       {user.role ==='admin' && <h3 className="text-xl my-5 font-bold tracking-tight text-gray-900">
-          role : {user.role}
+       {userInfo.role ==='admin' && <h3 className="text-xl my-5 font-bold tracking-tight text-gray-900">
+          role : {userInfo.role}
         </h3>}
         <div className="border-t border-gray-200 p-4 py-6 sm:px-6">
           <button
@@ -229,7 +229,7 @@ export function UserProfile() {
           ) : null}
 
           <p className="mt-0.5 text-sm text-gray-500">Your Address :</p>
-          {user.addresses.map((address, index) => (
+          {userInfo.addresses.map((address, index) => (
             <div>
               {selectedEditIndex === index ? (
                 <form

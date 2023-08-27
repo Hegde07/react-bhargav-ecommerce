@@ -10,28 +10,28 @@ import { discountedPrice } from "../../../app/constants";
 
 const UserOrders = () => {
   const dispatch = useDispatch();
-  const user = useSelector(selectUserInfo);
+  const userInfo = useSelector(selectUserInfo);
   const orders = useSelector(selectUserOrders);
   console.log(orders)
   useEffect(() => {
-    dispatch(fetchLoggedInUserOrderAsync(user.id));
+    dispatch(fetchLoggedInUserOrderAsync(userInfo.id));
   }, []);
   return (
     <div>
-      {orders?.map((order) => (
+      {orders.map((order) => (
         <div>
           <div className="mx-auto mt-12 bg-white max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-              Order #{order?.id}
+              Order #{order.id}
             </h1>
             <h3 className="text-xl font-bold tracking-tight text-gray-900">
-              Order Status : {order?.status}
+              Order Status : {order.status}
             </h3>
             <div>
               <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                 <div className="flow-root">
                   <ul role="list" className="-my-6 divide-y divide-gray-200">
-                    {order?.items?.map((item) => (
+                    {order.items.map((item) => (
                       <li key={item.id} className="flex py-6">
                         <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                           <img
