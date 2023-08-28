@@ -91,7 +91,7 @@ export function AdminProductList() {
 
   useEffect(() => {
     const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
-    dispatch(fetchProductsByFilterAsync({ filter, sort, pagination }));
+    dispatch(fetchProductsByFilterAsync({ filter, sort, pagination,admin:true }));
   }, [dispatch, filter, sort, page]);
 
   useEffect(() => {
@@ -530,7 +530,7 @@ function ProductGrid({ products }) {
                   </div>
                 </Link>
                 <div className="mt-5">
-                  <Link to={`/product-form/edit/${product.id}`} className="rounded-md my-5 bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                  <Link to={`/admin/product-form/edit/${product.id}`} className="rounded-md my-5 bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                     Edit Product
                   </Link>
                 </div>
