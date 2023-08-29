@@ -6,6 +6,8 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, Navigate } from "react-router-dom";
 import {
   deleteItemFromCartAsync,
+  selectCartLoaded,
+  selectCartStatus,
   selectItems,
   updateCartAsync,
 } from "./cartSlice";
@@ -14,6 +16,8 @@ import Modals from "../common/Modals";
 export function Cart() {
   const dispatch = useDispatch();
   const items = useSelector(selectItems);
+  const status = useSelector(selectCartStatus)
+  const cartLoaded = useSelector(selectCartLoaded)
   const [open, setOpen] = useState(true);
   const [openModal, setOpenModal] = useState(null);
   const totalAmount = items.reduce(
@@ -31,7 +35,7 @@ export function Cart() {
 
   return (
     <>
-      {!items.length && <Navigate to="/" replace={true}></Navigate>}
+      {!items.length && cartLoaded && <Navigate to="/" replace={true}></Navigate>}
 
       <div className="mx-auto mt-12 bg-white max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold tracking-tight text-gray-900">
