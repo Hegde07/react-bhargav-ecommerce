@@ -9,11 +9,11 @@ import {
 } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
 import { selectItems } from "../cart/cartSlice";
-import { selectLoggedInUser } from "../auth/authSlice";
+import { selectUserInfo } from "../user/userSlice";
 
 
 const navigation = [
-  { name: "Products", link: "/", user: true },
+  { name: "Products", link: "/", userInfo: true },
   { name: "Products", link: "/admin", admin: true },
   { name: "Orders", link: "/admin/orders", admin: true },
 ];
@@ -28,9 +28,10 @@ function classNames(...classes) {
 }
 const Navbar = ({ children }) => {
   const items = useSelector(selectItems);
-  const user= useSelector(selectLoggedInUser)
+  const userInfo= useSelector(selectUserInfo)
   return (
-    <div className="min-h-full">
+    <>
+   { userInfo && <div className="min-h-full">
       <Disclosure as="nav" className="bg-gray-800">
         {({ open }) => (
           <>
@@ -49,7 +50,7 @@ const Navbar = ({ children }) => {
                   <div className="hidden md:block">
                     <div className="ml-10 flex items-baseline space-x-4">
                       {navigation.map((item) =>
-                        item[user.role] ? (
+                        item[userInfo.role] ? (
                           <Link
                             key={item.name}
                             to={item.link}
@@ -92,10 +93,10 @@ const Navbar = ({ children }) => {
                       <div>
                         <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                           <span className="absolute -inset-1.5" />
-                          <span className="sr-only">Open user menu</span>
+                          <span className="sr-only">Open userInfo menu</span>
                           <img
                             className="h-8 w-8 rounded-full"
-                            src={user.imageUrl}
+                            src={userInfo.imageUrl}
                             alt=""
                           />
                         </Menu.Button>
@@ -169,16 +170,16 @@ const Navbar = ({ children }) => {
                   <div className="flex-shrink-0">
                     <img
                       className="h-10 w-10 rounded-full"
-                      src={user.imageUrl}
+                      src={userInfo.imageUrl}
                       alt=""
                     />
                   </div>
                   <div className="ml-3">
                     <div className="text-base font-medium leading-none text-white">
-                      {user.name}
+                      {userInfo.name}
                     </div>
                     <div className="text-sm font-medium leading-none text-gray-400">
-                      {user.email}
+                      {userInfo.email}
                     </div>
                   </div>
                   <Link to="/cart">
@@ -227,7 +228,8 @@ const Navbar = ({ children }) => {
       <main>
         <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">{children}</div>
       </main>
-    </div>
+    </div>}
+    </>
   );
 };
 

@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ThreeCircles } from  'react-loader-spinner'
 import {
   fetchLoggedInUserOrderAsync,
   selectUserInfo,
+  selectUserInfoStatus,
   selectUserOrders,
 } from "../userSlice";
 import { Link } from "react-router-dom";
@@ -10,15 +12,15 @@ import { discountedPrice } from "../../../app/constants";
 
 const UserOrders = () => {
   const dispatch = useDispatch();
-  const userInfo = useSelector(selectUserInfo);
   const orders = useSelector(selectUserOrders);
+  const status = useSelector(selectUserInfoStatus)
   console.log(orders)
   useEffect(() => {
-    dispatch(fetchLoggedInUserOrderAsync(userInfo.id));
-  }, []);
+    dispatch(fetchLoggedInUserOrderAsync());
+  }, [dispatch]);
   return (
     <div>
-      {orders.map((order) => (
+      {orders && orders.map((order) => (
         <div>
           <div className="mx-auto mt-12 bg-white max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
@@ -111,6 +113,18 @@ const UserOrders = () => {
           </div>
         </div>
       ))}
+      {status ==='loading' ? <ThreeCircles
+            height="100"
+            width="100"
+            color="#4fa94d"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+            ariaLabel="three-circles-rotating"
+            outerCircleColor=""
+            innerCircleColor=""
+            middleCircleColor=""
+          />:null}
     </div>
   );
 };
