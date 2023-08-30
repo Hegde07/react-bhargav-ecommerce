@@ -16,7 +16,11 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import Protected from "./features/auth/components/Protected";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchItemsByUserIdAsync } from "./features/cart/cartSlice";
-import {  checkAuthAsync, selectLoggedInUser, selectUserChecked } from "./features/auth/authSlice";
+import {
+  checkAuthAsync,
+  selectLoggedInUser,
+  selectUserChecked,
+} from "./features/auth/authSlice";
 import PageNotFound from "./pages/PageNotFound";
 import OrderSuccessful from "./pages/OrderSuccessful";
 import UserOrderPage from "./pages/UserOrderPage";
@@ -33,9 +37,10 @@ import AdminProductFormPage from "./pages/AdminProductFormPage";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
 import { positions, Provider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
+import StripeCheckout from "./pages/StripeCheckout";
 const options = {
   timeout: 5000,
-  position: positions.BOTTOM_LEFT
+  position: positions.BOTTOM_LEFT,
 };
 const router = createBrowserRouter([
   {
@@ -131,12 +136,20 @@ const router = createBrowserRouter([
     element: <OrderSuccessful></OrderSuccessful>,
   },
   {
-    path: "/orders",
+    path: "/my-orders",
     element: <UserOrderPage></UserOrderPage>,
   },
   {
     path: "/profile",
     element: <UserProfilePage></UserProfilePage>,
+  },
+  {
+    path: "/stripe-checkout/",
+    element: (
+      <Protected>
+        <StripeCheckout></StripeCheckout>,
+      </Protected>
+    ),
   },
   {
     path: "/logout",
@@ -155,10 +168,10 @@ const router = createBrowserRouter([
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser);
-  const userChecked = useSelector(selectUserChecked)
-  useEffect(()=>{
-    dispatch(checkAuthAsync())
-  },[dispatch])
+  const userChecked = useSelector(selectUserChecked);
+  useEffect(() => {
+    dispatch(checkAuthAsync());
+  }, [dispatch]);
   useEffect(() => {
     if (user) {
       dispatch(fetchItemsByUserIdAsync());
@@ -167,9 +180,11 @@ function App() {
   }, [dispatch, user]);
   return (
     <div className="App">
-       {userChecked && <Provider template={AlertTemplate} {...options}>
-      <RouterProvider router={router} />
-      </Provider>}
+      {userChecked && (
+        <Provider template={AlertTemplate} {...options}>
+          <RouterProvider router={router} />
+        </Provider>
+      )}
     </div>
   );
 }
